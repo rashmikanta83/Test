@@ -1,0 +1,15 @@
+ Can you explain Hibernate callback interfaces?
+ What is Dirty Checking Feature in Hibernate?
+ Can you explain version field?
+ Hibernate Locking? [Optimistic and Pessimistic]
+ @Version and @Audit
+ What are your views on the function addClass?
+ Can you explain the role of addDirectory() and addjar() methods?
+ What do you understand by Hibernate tuning?
+ Difference between get() vs load() method in Hibernate?
+What is difference between getCurrentSession() and openSession() in Hibernate?
+What is the difference between save() and saveOrUpdate() method of Hibernate?
+When do you use merge() and update() in Hibernate?
+The difference between sorted and ordered collection in Hibernate? 
+How do you log SQL queries issued by the Hibernate framework in Java application
+How to configure the connection pool size?
