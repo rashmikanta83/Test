@@ -15,3 +15,4 @@ How do you log SQL queries issued by the Hibernate framework in Java application
 How to configure the connection pool size?
 How do you configure folder scan for Hibernate beans?
 Is it possible to connect multiple database in a single Java application using Hibernate?
+Why is ORM preferred over JDBC?
