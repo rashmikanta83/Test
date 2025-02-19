@@ -1,0 +1,67 @@
+CREATE OR REPLACE FUNCTION number_to_words_indian(n BIGINT) 
+RETURNS TEXT AS $$
+DECLARE
+    ones TEXT[] := ARRAY['', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine'];
+    teens TEXT[] := ARRAY['Ten', 'Eleven', 'Twelve', 'Thirteen', 'Fourteen', 'Fifteen', 'Sixteen', 'Seventeen', 'Eighteen', 'Nineteen'];
+    tens TEXT[] := ARRAY['', '', 'Twenty', 'Thirty', 'Forty', 'Fifty', 'Sixty', 'Seventy', 'Eighty', 'Ninety'];
+    denominations TEXT[] := ARRAY['', 'Thousand', 'Lakh', 'Crore'];
+    
+    word TEXT := '';
+    num_part INT;
+    part_index INT := 0;
+    num_str TEXT;
+    crore_part INT;
+    lakh_part INT;
+    thousand_part INT;
+    hundred_part INT;
+    remainder_part INT;
+BEGIN
+    -- Handle zero case
+    IF n = 0 THEN
+        RETURN 'Zero';
+    END IF;
+    
+    -- Extract parts of the number according to the Indian numbering system
+    crore_part := n / 10000000;
+    lakh_part := (n % 10000000) / 100000;
+    thousand_part := (n % 100000) / 1000;
+    hundred_part := (n % 1000) / 100;
+    remainder_part := n % 100;
+
+    -- Process Crores
+    IF crore_part > 0 THEN
+        word := word || number_to_words_indian(crore_part) || ' Crore';
+    END IF;
+
+    -- Process Lakhs
+    IF lakh_part > 0 THEN
+        word := word || CASE WHEN word <> '' THEN ' ' ELSE '' END || number_to_words_indian(lakh_part) || ' Lakh';
+    END IF;
+
+    -- Process Thousands
+    IF thousand_part > 0 THEN
+        word := word || CASE WHEN word <> '' THEN ' ' ELSE '' END || number_to_words_indian(thousand_part) || ' Thousand';
+    END IF;
+
+    -- Process Hundreds
+    IF hundred_part > 0 THEN
+        word := word || CASE WHEN word <> '' THEN ' ' ELSE '' END || ones[hundred_part] || ' Hundred';
+    END IF;
+
+    -- Process Remainder (Last Two Digits)
+    IF remainder_part > 0 THEN
+        IF remainder_part < 10 THEN
+            word := word || CASE WHEN word <> '' THEN ' ' ELSE '' END || ones[remainder_part];
+        ELSIF remainder_part < 20 THEN
+            word := word || CASE WHEN word <> '' THEN ' ' ELSE '' END || teens[remainder_part - 9];
+        ELSE
+            word := word || CASE WHEN word <> '' THEN ' ' ELSE '' END || tens[remainder_part / 10];
+            IF (remainder_part % 10) > 0 THEN
+                word := word || ' ' || ones[remainder_part % 10];
+            END IF;
+        END IF;
+    END IF;
+
+    RETURN word;
+END;
+$$ LANGUAGE plpgsql;
